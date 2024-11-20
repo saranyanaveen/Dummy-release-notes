@@ -1,0 +1,6 @@
+// Dummy feature to test Release Drafter PR
+public class DummyFeature {
+    public void newFeatureTest() {
+        System.out.println("Testing Release Drafter workflow with a new feature.");
+    }
+}
