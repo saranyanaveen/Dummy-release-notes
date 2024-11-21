@@ -2,15 +2,30 @@
 name-template: Release $NEXT_PATCH_VERSION
 tag-template: v$NEXT_PATCH_VERSION
 categories:
-  - title: New Features
+  - title: 🚀 New Features
     labels:
       - enhancement
-  - title: Bug Fixes
+  - title: 🔧 Improvements
+    labels:
+      - improvement
+  - title: 🐛 Bug Fixes
     labels:
       - bug
-  - title: Documentation
+  - title: 📝 Documentation
     labels:
       - documentation
 template: |
   ## What's Changed
   $CHANGES
+
+  ## 🚀 New Features:
+  $NEW_FEATURES
+
+  ## 🔧 Improvements:
+  $IMPROVEMENTS
+
+  ## 🐛 Bug Fixes:
+  $BUG_FIXES
+
+  ## 📝 Documentation:
+  $DOCUMENTATION
