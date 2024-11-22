@@ -49,6 +49,15 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_ENV  # Set the version as an environment variable
           echo "New version tag is: $VERSION"  # Debug: Output the new version
 
+      # Debug: Ensure that VERSION is not empty before proceeding
+      - name: Check VERSION
+        run: |
+          if [ -z "$VERSION" ]; then
+            echo "Error: VERSION is empty. Cannot proceed with tagging."
+            exit 1
+          fi
+          echo "VERSION is set to: $VERSION"
+
       # Create a new Git tag based on the fetched or incremented version number
       - name: Create Git Tag
         run: |
