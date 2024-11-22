@@ -24,4 +24,4 @@ jobs:
         with:
           config-name: release-drafter.yml  # Use the config file created
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_PAT }}  # Use the secret here
