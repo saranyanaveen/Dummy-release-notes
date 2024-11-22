@@ -15,11 +15,11 @@ jobs:
       - name: Set up Node.js for Release Drafter
         uses: actions/setup-node@v3  # Use the latest version of setup-node
         with:
-          node-version: '20'  # Use Node.js 18 (or change to '20' for Node.js 20)
+          node-version: '20'  # Use Node.js 20
 
       - name: Generate Release Notes
         uses: release-drafter/release-drafter@v5
         with:
           config-name: release-drafter.yml  # Use the configuration file we created
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Provide GitHub token for access
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_PAT }}  # Use your personal access token
