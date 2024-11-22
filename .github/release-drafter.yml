@@ -3,6 +3,11 @@ tag-template: 'v$NEXT_RELEASE_VERSION'
 
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 
+template: |
+  ## $NAME
+  $CHANGES
+  ### Version: $NEXT_RELEASE_VERSION
+
 categories:
   - title: 'New Features'
     labels: ['feat']
