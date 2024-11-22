@@ -32,18 +32,19 @@ jobs:
       - name: Get Latest Release Tag
         id: get-version
         run: |
+          # Fetch the latest release version
           VERSION=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name')
-          
+
           if [ "$VERSION" == "null" ]; then
-            VERSION="v1.0.0"  # Default version if no release is found
+            VERSION="v0.1.0"  # Default version if no release is found
           fi
-          
-          # Increment version (simple example: increment patch version)
+
+          # Increment the version
           VERSION_PARTS=(${VERSION//./ })
           PATCH=${VERSION_PARTS[2]}
           PATCH=$((PATCH + 1))
-          VERSION="v${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.$PATCH"
+          VERSION="v${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.$PATCH"  # Increment the patch version
 
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "New version tag is: $VERSION"  # Display the new version
