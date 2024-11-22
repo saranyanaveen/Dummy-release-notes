@@ -3,7 +3,7 @@ name: Release Drafter Workflow
 on:
   push:
     branches:
-      - main  # Trigger the workflow on push to the main branch
+      - main  # Trigger on push to main branch
   pull_request:
     types:
       - opened
@@ -28,15 +28,36 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Provide GitHub token for API access
 
-      # Create a new Git tag based on the version number from Release Drafter
+      # Get the latest release tag (to increment version)
+      - name: Get Latest Release Tag
+        id: get-version
+        run: |
+          VERSION=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name')
+          
+          if [ "$VERSION" == "null" ]; then
+            VERSION="v1.0.0"  # Default version if no release is found
+          fi
+          
+          # Increment version (simple example: increment patch version)
+          VERSION_PARTS=(${VERSION//./ })
+          PATCH=${VERSION_PARTS[2]}
+          PATCH=$((PATCH + 1))
+          VERSION="v${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.$PATCH"
+
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "New version tag is: $VERSION"  # Display the new version
+
+      # Create a new Git tag based on the fetched or incremented version number
       - name: Create Git Tag
         run: |
-          VERSION=$(cat .release_version)  # You can store the version in a file or fetch from a template
-          git tag "v$VERSION"  # Create the Git tag
-          git push origin "v$VERSION"  # Push the tag to GitHub
+          git tag "$VERSION"  # Create the Git tag
+          git push origin "$VERSION"  # Push the tag to GitHub
 
-      # Publish the Release on GitHub using the created tag
+      # Publish the Release using the created Git tag
       - name: Publish Release
         uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.version }}  # Use the newly created tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Provide GitHub token for release creation
