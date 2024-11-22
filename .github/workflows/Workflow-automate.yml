@@ -1,81 +1,25 @@
-name: Release Drafter Workflow
+name: Release Drafter
 
 on:
   push:
     branches:
-      - main  # Trigger on push to main branch
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - edited
-
-permissions:
-  contents: write  # Allows GitHub Actions to update content
+      - main  # Trigger the action when a commit is pushed to the main branch
 
 jobs:
-  update_release_drafter:
+  generate-release-notes:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3  # Checkout the repository code
+        uses: actions/checkout@v3  # Checkout the code from the repository
 
-      - name: Run Release Drafter
+      - name: Set up Node.js for Release Drafter
+        uses: actions/setup-node@v3  # Use the latest version of setup-node
+        with:
+          node-version: '20'  # Use Node.js 18 (or change to '20' for Node.js 20)
+
+      - name: Generate Release Notes
         uses: release-drafter/release-drafter@v5
         with:
-          config-name: release-drafter.yml  # Use your custom release drafter config file
+          config-name: release-drafter.yml  # Use the configuration file we created
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Provide GitHub token for API access
-
-      # Get the latest release tag (to increment version)
-      - name: Get Latest Release Tag
-        id: get-version
-        run: |
-          # Fetch the latest release version
-          API_RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/releases/latest)
-          
-          echo "API Response: $API_RESPONSE"  # Debug: Print the API response to check if it's correct
-
-          VERSION=$(echo "$API_RESPONSE" | jq -r '.tag_name')
-          
-          # Debug to check if the VERSION is correct after parsing
-          echo "Parsed VERSION: $VERSION"
-
-          if [ "$VERSION" == "null" ] || [ -z "$VERSION" ]; then
-            VERSION="v0.1.0"  # Default version if no release is found
-          fi
-
-          # Increment the version
-          VERSION_PARTS=(${VERSION//./ })  # Split the version string at "."
-          PATCH=${VERSION_PARTS[2]}  # The patch part of the version
-          PATCH=$((PATCH + 1))  # Increment the patch version by 1
-          VERSION="v${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.$PATCH"  # Construct the new version
-
-          echo "version=$VERSION" >> $GITHUB_ENV  # Set the version as an environment variable
-          echo "New version tag is: $VERSION"  # Debug: Output the new version
-
-      # Debug: Ensure that VERSION is not empty before proceeding
-      - name: Check VERSION
-        run: |
-          if [ -z "$VERSION" ]; then
-            echo "Error: VERSION is empty. Cannot proceed with tagging."
-            exit 1
-          fi
-          echo "VERSION is set to: $VERSION"
-
-      # Create a new Git tag based on the fetched or incremented version number
-      - name: Create Git Tag
-        run: |
-          echo "Tagging with version: $VERSION"  # Debug: Ensure the version is correctly set
-          git tag "$VERSION"  # Create the Git tag
-          git push origin "$VERSION"  # Push the tag to GitHub
-
-      # Publish the Release using the created Git tag
-      - name: Publish Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ env.version }}  # Use the new version tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for release creation
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Provide GitHub token for access
