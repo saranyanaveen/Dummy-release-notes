@@ -33,10 +33,14 @@ jobs:
         id: get-version
         run: |
           # Fetch the latest release version
-          VERSION=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name')
+          API_RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/releases/latest)
+          
+          echo "API Response: $API_RESPONSE"  # Debug: Print the API response to check if it's correct
 
-          if [ "$VERSION" == "null" ]; then
+          VERSION=$(echo "$API_RESPONSE" | jq -r '.tag_name')
+
+          if [ "$VERSION" == "null" ] || [ -z "$VERSION" ]; then
             VERSION="v0.1.0"  # Default version if no release is found
           fi
 
