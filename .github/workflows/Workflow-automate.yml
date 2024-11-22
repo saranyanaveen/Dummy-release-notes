@@ -41,17 +41,18 @@ jobs:
           fi
 
           # Increment the version
-          VERSION_PARTS=(${VERSION//./ })
-          PATCH=${VERSION_PARTS[2]}
-          PATCH=$((PATCH + 1))
-          VERSION="v${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.$PATCH"  # Increment the patch version
+          VERSION_PARTS=(${VERSION//./ })  # Split the version string at "."
+          PATCH=${VERSION_PARTS[2]}  # The patch part of the version
+          PATCH=$((PATCH + 1))  # Increment the patch version by 1
+          VERSION="v${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.$PATCH"  # Construct the new version
 
-          echo "version=$VERSION" >> $GITHUB_ENV
-          echo "New version tag is: $VERSION"  # Display the new version
+          echo "version=$VERSION" >> $GITHUB_ENV  # Set the version as an environment variable
+          echo "New version tag is: $VERSION"  # Debug: Output the new version
 
       # Create a new Git tag based on the fetched or incremented version number
       - name: Create Git Tag
         run: |
+          echo "Tagging with version: $VERSION"  # Debug: Ensure the version is correctly set
           git tag "$VERSION"  # Create the Git tag
           git push origin "$VERSION"  # Push the tag to GitHub
 
@@ -59,6 +60,6 @@ jobs:
       - name: Publish Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ env.version }}  # Use the newly created tag
+          tag_name: ${{ env.version }}  # Use the new version tag
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Provide GitHub token for release creation
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for release creation
