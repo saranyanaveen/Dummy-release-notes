@@ -39,6 +39,9 @@ jobs:
           echo "API Response: $API_RESPONSE"  # Debug: Print the API response to check if it's correct
 
           VERSION=$(echo "$API_RESPONSE" | jq -r '.tag_name')
+          
+          # Debug to check if the VERSION is correct after parsing
+          echo "Parsed VERSION: $VERSION"
 
           if [ "$VERSION" == "null" ] || [ -z "$VERSION" ]; then
             VERSION="v0.1.0"  # Default version if no release is found
