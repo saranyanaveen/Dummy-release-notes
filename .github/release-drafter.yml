@@ -1,26 +1,31 @@
-name-template: 'v$NEXT_RELEASE_VERSION Draft'
-tag-template: 'v$NEXT_RELEASE_VERSION'
-
-change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
-
+name-template: "v$NEXT_RELEASE_VERSION Draft"
+tag-template: "v$NEXT_RELEASE_VERSION"
 categories:
-  - title: 'New Features'
-    labels: ['feat']
-  - title: 'Bug Fixes'
-    labels: ['fix']
-  - title: 'Improvements'
-    labels: ['improvement']
+  - title: "🚀 New Features"
+    labels:
+      - "feat"
+  - title: "🐛 Bug Fixes"
+    labels:
+      - "fix"
+  - title: "🔧 Improvements"
+    labels:
+      - "improvement"
+template: |
+  ## What's Changed
+  $CHANGES
 
-versioning:
-  - tag: 'v1.0.0'  # Start from version v1.0.0
-
-next-version-template: 'v$MAJOR.$MINOR.$PATCH'
-
-bump-minor-on:
-  - 'feat'  # Increment minor version for new features
-
-bump-patch-on:
-  - 'fix'  # Increment patch version for bug fixes
-
-bump-major-on:
-  - 'breaking-change'  # Increment major version for breaking changes
+  ## Contributors
+  $CONTRIBUTORS
+change-template: "- $TITLE by @$AUTHOR in #$NUMBER"
+no-changes-template: "* No changes"
+version-resolver:
+  major:
+    labels:
+      - "breaking-change"
+  minor:
+    labels:
+      - "feat"
+  patch:
+    labels:
+      - "fix"
+prerelease: false
