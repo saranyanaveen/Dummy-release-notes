@@ -1,4 +1,5 @@
-name: Release Drafter
+name: Release Drafter Workflow
+
 on:
   push:
     branches:
@@ -9,22 +10,27 @@ on:
       - reopened
       - synchronize
       - edited
+
 permissions:
-  contents: write
+  contents: write  # Allows access to update content
+
 jobs:
   update_release_drafter:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v3
+      
       - name: Run Release Drafter
         uses: release-drafter/release-drafter@v5
         with:
-          config-name: release-drafter.yml
+          config-name: release-drafter.yml  # Your configuration file
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Publish Release
-        if: github.event_name == 'push'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Auth token for GitHub access
+
+      # GitHub Tagging is handled automatically when a new tag is pushed
+      - name: Push Release Drafter Tag
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
