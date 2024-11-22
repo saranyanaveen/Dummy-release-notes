@@ -3,7 +3,7 @@ name: Release Drafter Workflow
 on:
   push:
     branches:
-      - main
+      - main  # Trigger the workflow on push to the main branch
   pull_request:
     types:
       - opened
@@ -12,25 +12,31 @@ on:
       - edited
 
 permissions:
-  contents: write  # Allows access to update content
+  contents: write  # Allows GitHub Actions to update content
 
 jobs:
   update_release_drafter:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
-      
+        uses: actions/checkout@v3  # Checkout the repository code
+
       - name: Run Release Drafter
         uses: release-drafter/release-drafter@v5
         with:
-          config-name: release-drafter.yml  # Your configuration file
+          config-name: release-drafter.yml  # Use your custom release drafter config file
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Auth token for GitHub access
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Provide GitHub token for API access
 
-      # GitHub Tagging is handled automatically when a new tag is pushed
-      - name: Push Release Drafter Tag
+      # Create a new Git tag based on the version number from Release Drafter
+      - name: Create Git Tag
+        run: |
+          VERSION=$(cat .release_version)  # You can store the version in a file or fetch from a template
+          git tag "v$VERSION"  # Create the Git tag
+          git push origin "v$VERSION"  # Push the tag to GitHub
+
+      # Publish the Release on GitHub using the created tag
+      - name: Publish Release
         uses: softprops/action-gh-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Provide GitHub token for release creation
