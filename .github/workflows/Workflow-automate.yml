@@ -1,36 +1,27 @@
-name: Release
-
-on:
-  workflow_dispatch:
-
-jobs:
-  release:
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-
-      # Set Git identity for commit actions
-      - name: Set Git identity
-        run: |
-          git config --global user.name "saranyanaveen"
-          git config --global user.email "saranaveen1997@gmail.com"
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - run: npm ci
-      # Remove this line if you don't need to build the project
-      #- run: npm run build  
-
-      # If not using GitHub App token, directly use the GITHUB_TOKEN:
-      - run: npx semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use GITHUB_TOKEN directly if you're not using a custom app token
+---
+  name: Release
+  on:
+    workflow_dispatch: null
+  jobs:
+    release:
+      permissions:
+        contents: write
+        issues: write
+        pull-requests: write
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+            persist-credentials: false
+        - name: Set Git identity
+          run: |
+            git config --global user.name "saranyanaveen"
+            git config --global user.email "saranaveen1997@gmail.com"
+        - uses: actions/setup-node@v4
+          with:
+            node-version: 20
+        - run: npx semantic-release
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
