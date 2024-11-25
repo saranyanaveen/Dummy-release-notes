@@ -36,7 +36,8 @@ jobs:
 
       - name: Commit version bump and push changes
         run: |
-          git commit -am "chore(release): bump version"
+          git add .
+          git commit -m "chore(release): bump version"
           git push https://x-access-token:${{ secrets.MY_GITHUB_PAT }}@github.com/${{ github.repository }} HEAD:main --follow-tags
 
   generate-release-notes:
@@ -56,4 +57,4 @@ jobs:
         with:
           config-name: release-drafter.yml
         env:
-          GITHUB_TOKEN: ${{ secrets.my_GITHUB_PAT}}
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_PAT }}
