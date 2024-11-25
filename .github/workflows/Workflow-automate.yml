@@ -21,7 +21,8 @@ jobs:
 
       - name: Get current version from tags
         run: |
-          latest_tag=$(git describe --tags --abbrev=0)
+          # Check if there are tags in the repository
+          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
           echo "Latest tag: $latest_tag"
           echo "LATEST_TAG=$latest_tag" >> $GITHUB_ENV
 
