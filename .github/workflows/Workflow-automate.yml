@@ -1,27 +1,24 @@
-name: Release Drafter
-
-on:
-  push:
-    branches:
-      - main  # Trigger the action when a commit is pushed to the main branch
-    tags:
-      - 'v*'  # Trigger on version tags like v1.0.0, v1.1.0, etc.
-
-jobs:
-  generate-release-notes:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js for Release Drafter
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Generate Release Notes
-        uses: release-drafter/release-drafter@v5
-        with:
-          config-name: release-drafter.yml  # Use the config file created
-        env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_PAT }}  # Use the secret here
+---
+  name: Release Drafter
+  on:
+    push:
+      branches:
+        - main
+    pull_request:
+      types:
+        - opened
+        - reopened
+        - closed
+  jobs:
+    draft-release:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+        - name: Run Release Drafter
+          uses: release-drafter/release-drafter@v6.0.0
+          with:
+            config-name: release-drafter.yml
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
