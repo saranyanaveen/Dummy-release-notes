@@ -1,5 +1,5 @@
-name-template: "v$NEXT_RELEASE_VERSION Draft"
-tag-template: "v$NEXT_RELEASE_VERSION"
+name-template: "v{{NEXT}} Draft"
+tag-template: "v{{NEXT}}"
 categories:
   - title: "🚀 New Features"
     labels:
