@@ -17,18 +17,21 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'  # Adjust to the version you want to use
+          node-version: '20'
+
+      - name: Clean npm cache
+        run: npm cache clean --force
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --global standard-version
 
       - name: Run standard-version to bump version
         run: npx standard-version
 
       - name: Push version bump commit and tag
         run: |
-          git config --global user.name "Your Name"
-          git config --global user.email "your.email@example.com"
+          git config --global user.name "saranaveen"
+          git config --global user.email "saranaveen1997@gmail.com"
           git commit -am "chore(release): bump version"
           git push --follow-tags
 
@@ -42,7 +45,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # Adjust to the version you want to use
+          node-version: '20'
 
       - name: Generate Release Notes with Release Drafter
         uses: release-drafter/release-drafter@v5
