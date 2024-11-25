@@ -28,10 +28,14 @@ jobs:
       - name: Run standard-version to bump version
         run: npx standard-version
 
-      - name: Push version bump commit and tag
+      - name: Set Git identity
         run: |
-          git config --global user.name "saranyanaveen"
-          git config --global user.email "saranaveen1997@gmail.com"
+          git config user.name "saranyanaveen"
+          git config user.email "saranaveen1997@gmail.com"
+          git config --list  # Optional: to verify the user settings
+
+      - name: Commit version bump and push changes
+        run: |
           git commit -am "chore(release): bump version"
           git push --follow-tags
 
