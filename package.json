@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "name": "dummy-release-notes",
   "version": "1.0.0",
@@ -14,3 +15,15 @@
     "standard-version": "^9.5.0"
   }
 }
+=======
+name: dummy-release-notes
+version: 1.0.0
+scripts:
+  test: 'echo "Error: no test specified" && exit 1'
+keywords: []
+author: ""
+license: ISC
+description: ""
+devDependencies:
+  standard-version: ^9.5.0
+>>>>>>> b18901e70b58d249ac0e7ac681599a74a621cc2e
