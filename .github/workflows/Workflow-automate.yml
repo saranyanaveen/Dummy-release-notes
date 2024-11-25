@@ -30,7 +30,7 @@ jobs:
 
       - name: Push version bump commit and tag
         run: |
-          git config --global user.name "saranaveen"
+          git config --global user.name "saranyanaveen"
           git config --global user.email "saranaveen1997@gmail.com"
           git commit -am "chore(release): bump version"
           git push --follow-tags
