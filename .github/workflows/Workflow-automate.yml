@@ -1,27 +1,23 @@
 ---
-  name: Release
-  on:
-    workflow_dispatch: null
-  jobs:
-    release:
-      permissions:
-        contents: write
-        issues: write
-        pull-requests: write
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
-            persist-credentials: false
-        - name: Set Git identity
-          run: |
-            git config --global user.name "saranyanaveen"
-            git config --global user.email "saranaveen1997@gmail.com"
-        - uses: actions/setup-node@v4
-          with:
-            node-version: 20
-        - run: npx semantic-release
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
+name: Release Drafter
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Release Drafter
+        uses: release-drafter/release-drafter@v6.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
