@@ -1,14 +1,15 @@
 {
   "name": "dummy-release-notes",
   "version": "1.0.0",
-  "main": "fix-dashboard.js",
+  "description": "Automate release notes and versioning",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "standard-version"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "standard-version": "^9.5.0"
   }
