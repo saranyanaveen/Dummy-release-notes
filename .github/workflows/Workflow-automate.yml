@@ -8,7 +8,9 @@
       types:
         - opened
         - reopened
+        - synchronize
         - closed
+  
   jobs:
     draft-release:
       runs-on: ubuntu-latest
