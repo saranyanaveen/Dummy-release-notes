@@ -1,14 +1,14 @@
-name: Release Drafter
+name: Generate Release Notes
 
 on:
   push:
     branches:
-      - main  # Trigger the action when a commit is pushed to the main branch
+      - main  # Trigger on push to main
     tags:
       - 'v*'  # Trigger on version tags like v1.0.0, v1.1.0, etc.
 
 jobs:
-  generate-release-notes:
+  release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -19,9 +19,20 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Generate Release Notes
+      - name: Get current version from tags
+        run: |
+          latest_tag=$(git describe --tags --abbrev=0)
+          echo "Latest tag: $latest_tag"
+          echo "LATEST_TAG=$latest_tag" >> $GITHUB_ENV
+
+      - name: Increment version (patch)
+        run: |
+          # This will increment the version to the next patch version (v1.0.1, v1.0.2, etc.)
+          npm version patch
+
+      - name: Generate Release Notes with Release Drafter
         uses: release-drafter/release-drafter@v5
         with:
-          config-name: release-drafter.yml  # Use the config file created
+          config-name: release-drafter.yml  # Make sure this config is correct
         env:
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_PAT }}  # Use the secret here
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
