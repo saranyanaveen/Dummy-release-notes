@@ -33,16 +33,17 @@ jobs:
       - name: Run standard-version to bump version
         run: npx standard-version
 
-      - name: Set Git identity globally
+      # This step sets the Git identity locally
+      - name: Set Git identity locally
         run: |
-          git config --global user.name "saranyanaveen"
-          git config --global user.email "saranaveen1997@gmail.com"
-          git config --list  # Verify settings
+          git config --local user.name "saranyanaveen"
+          git config --local user.email "saranaveen1997@gmail.com"
+          git config --list  # Optional: Verify settings
 
       - name: Commit version bump and push changes
         run: |
           git add .
-          git commit -m "chore(release): bump version"
+          git commit --amend --no-edit --date "$(date)"  # Optional: Fix timestamp
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:main --follow-tags
 
   generate-release-notes:
