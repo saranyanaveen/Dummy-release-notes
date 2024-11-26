@@ -1,0 +1,11 @@
+public class ApiDocument {
+    public static void main(String[] args) {
+        System.out.println("This is a dummy program to test release notes.");
+        System.out.println("Add more features or modify this message to test further.");
+    }
+
+    // Add a new dummy feature (modify this to simulate changes)
+    public void newFeature() {
+        System.out.println("New feature added for testing Releasenotes.");
+    }
+}
