@@ -1,0 +1,6 @@
+// Dummy feature to test Release Drafter PR
+public class LogoutFeature {
+    public void newLogoutFeatureTest() {
+        System.out.println("Testing Release Drafter workflow with a logout feature.");
+    }
+}
